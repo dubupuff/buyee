@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COTIZADOR BUYEE</title>
+    <!-- Importamos la fuente Montserrat desde Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos Globales */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            /* Fondo Rosa Claro solicitado anteriormente */
+            background-color: #FFE5DF; 
+            /* Diseño sutil de estrellas blancas */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M15 5l1.2 2.5 2.8.4-2 2 1.3 2.6-2.3-1.5-2.3 1.5 1.3-2.6-2-2 2.8-.4L15 5zm30 30l.8 1.7 1.9.3-1.4 1.3.9 1.8-1.6-1-1.6 1 .9-1.8-1.4-1.3 1.9-.3.8-1.7zm5-20l.5 1 .9.2-.7.7.4 1-.8-.5-.8.5.4-1-.7-.7.9-.2.5-1z" fill="%23FFFFFF" fill-opacity="0.6"/></svg>');
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Contenedor del Cotizador (Contained) */
+        .cotizador-container {
+            background-color: #ffffff; /* Blanco puro */
+            max-width: 450px;
+            width: 100%;
+            padding: 35px 30px;
+            border-radius: 24px;
+            box-shadow: 0 12px 30px rgba(255, 182, 193, 0.25); /* Sombra suave */
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            text-align: center; /* Centra todo el contenido */
+        }
+
+        /* Título en Montserrat Negrita */
+        h1 {
+            font-size: 24px;
+            color: #111827;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+            text-align: center;
+        }
+
+        /* Subtítulo en Montserrat Negro */
+        .subtitulo {
+            font-size: 14px;
+            color: #000000;
+            font-weight: 500;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        /* Bloque del único Input */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #ff8fa3; /* Rosa oscuro estético */
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 18px;
+            border: 2px solid #ffe4e1;
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.2s ease;
+            color: #333333;
+            background-color: #fffafb;
+            text-align: center; /* Centra los números ingresados */
+        }
+
+        input[type="number"]:focus {
+            border-color: #ffb6c1;
+            box-shadow: 0 0 0 4px rgba(255, 182, 193, 0.3);
+            background-color: #ffffff;
+        }
+
+        /* Espacio para el resultado final grande */
+        .total-box {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ff758f; /* Rosa destacado */
+            margin: 20px 0 25px 0;
+            min-height: 40px;
+            text-align: center;
+        }
+
+        /* Texto de cierre abajo del cotizador */
+        .mensaje-final {
+            font-size: 13px;
+            color: #555555;
+            font-weight: 500;
+            line-height: 1.5;
+            border-top: 1px dashed #ffe4e1;
+            padding-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cotizador-container">
+        <h1>COTIZADOR BUYEE</h1>
+        <div class="subtitulo">dólar 1550 + 2.20 usd fee</div>
+
+        <!-- Único espacio para ingresar monto -->
+        <div class="input-group">
+            <label for="monto-input">ingresar el monto con punto. ejemplo: 2.50</label>
+            <input type="number" id="monto-input" placeholder="0.00" min="0" step="any" autofocus>
+        </div>
+
+        <!-- Muestra el resultado de la conversión directamente en Pesos -->
+        <div class="total-box" id="resultado-pesos">
+            $0,00 ARS
+        </div>
+
+        <!-- Mensaje final -->
+        <div class="mensaje-final">
+            una vez cotizado, mandame por dm el link así compro &lt;3
+        </div>
+    </div>
+
+    <script>
+        const TASA_CAMBIO = 1550;
+        const FEE_FIJO = 2.20;
+        const montoInput = document.getElementById('monto-input');
+        const resultadoPesos = document.getElementById('resultado-pesos');
+
+        montoInput.addEventListener('input', () => {
+            const valor = parseFloat(montoInput.value);
+            
+            if (!isNaN(valor) && valor >= 0) {
+                // Al valor ingresado le suma los 2.20 USD de fee, y a eso lo multiplica por 1550
+                const totalPesos = (valor + FEE_FIJO) * TASA_CAMBIO;
+                // Formato local de Argentina (puntos para miles, coma para decimales)
+                resultadoPesos.textContent = '$' + totalPesos.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ARS';
+            } else {
+                resultadoPesos.textContent = '$0,00 ARS';
+            }
+        });
+    </script>
+</body>
+</html>
